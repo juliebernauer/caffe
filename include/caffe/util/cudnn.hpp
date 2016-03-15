@@ -89,6 +89,7 @@ inline void createFilterDesc(cudnnFilterDescriptor_t* desc,
     int n, int c, int h, int w) {
   CUDNN_CHECK(cudnnCreateFilterDescriptor(desc));
   CUDNN_CHECK(cudnnSetFilter4dDescriptor(*desc, dataType<Dtype>::type,
+      CUDNN_TENSOR_NCHW,
       n, c, h, w));
 }
 
@@ -120,7 +121,9 @@ inline void createPoolingDesc(cudnnPoolingDescriptor_t* pool_desc,
     LOG(FATAL) << "Unknown pooling method.";
   }
   CUDNN_CHECK(cudnnCreatePoolingDescriptor(pool_desc));
-  CUDNN_CHECK(cudnnSetPooling2dDescriptor(*pool_desc, *mode, h, w,
+  CUDNN_CHECK(cudnnSetPooling2dDescriptor(*pool_desc, *mode,
+        CUDNN_PROPAGATE_NAN,
+        h, w,
         pad_h, pad_w, stride_h, stride_w));
 }
 
